@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="{{ current_lang }}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EcoNex | {{ t.profile_page }}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style> body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; } </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen flex flex-col lg:flex-row p-6 lg:p-12">
+  <main class="max-w-4xl mx-auto space-y-6 w-full">
+    <div class="flex items-center justify-between bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+      <h2 class="text-2xl font-extrabold text-slate-900">Profile Settings & Personas</h2>
+      <a href="/" class="px-4 py-2 bg-blue-600 text-white text-xs font-bold rounded-xl shadow">← Back to Dashboard</a>
+    </div>
+
+    <form action="/profile/update" method="POST" enctype="multipart/form-data" class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+      <div class="flex items-center gap-6 pb-4 border-b border-slate-100">
+        <img id="currentPhoto" src="{{ user.picture }}" class="w-20 h-20 rounded-2xl object-cover border-4 border-blue-500 shadow">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Upload Profile Photo</label>
+          <input type="file" name="avatar_file" accept="image/*" class="text-xs text-slate-500 file:py-2 file:px-4 file:rounded-xl file:border-0 file:bg-blue-50 file:text-blue-700 font-semibold cursor-pointer">
+        </div>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Full Name</label>
+          <input type="text" name="name" value="{{ user.name }}" required class="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Organization / City</label>
+          <input type="text" name="org" value="{{ user.org }}" class="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:bg-white">
+        </div>
+      </div>
+      <div>
+        <label class="block text-xs font-bold text-slate-700 mb-2">Select Active Persona Category</label>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {% for key, p in profiles.items() %}
+          <label class="border-2 rounded-xl p-4 flex items-center justify-between cursor-pointer {{ 'border-blue-600 bg-blue-50/50' if category_key == key else 'border-slate-200' }}">
+            <div class="flex items-center gap-3">
+              <span class="text-2xl">{{ p.icon }}</span>
+              <div>
+                <div class="font-bold text-sm text-slate-900">{{ p.label }}</div>
+                <div class="text-[11px] text-slate-500">{{ p.badge }}</div>
+              </div>
+            </div>
+            <input type="radio" name="profile_category" value="{{ key }}" {{ 'checked' if category_key == key }} class="h-4 w-4 text-blue-600">
+          </label>
+          {% endfor %}
+        </div>
+      </div>
+      <button type="submit" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm rounded-xl shadow transition">Save Profile Changes ✓</button>
+    </form>
+  </main>
+</body>
+</html>
